@@ -211,16 +211,7 @@ h1 {
 }
 
 .ufo-dome::before {
-  content: "";
-  position: absolute;
-  top: 1.05rem;
-  left: 1.45rem;
-  width: 2rem;
-  height: 0.22rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.66);
-  filter: blur(0.04rem);
+  display: none;
 }
 
 .ufo-ring {
