@@ -1,0 +1,758 @@
+:root {
+  --void: #050408;
+  --deep: #0b0714;
+  --ink: #f4f0e9;
+  --soft-ink: rgba(244, 240, 233, 0.72);
+  --muted: rgba(244, 240, 233, 0.46);
+  --line: rgba(244, 240, 233, 0.52);
+  --dim-line: rgba(244, 240, 233, 0.18);
+  --acid: #c6ff21;
+  --violet: #7a4dff;
+  --lilac: #c5b6ff;
+  --ember: #ff8b3d;
+  --paper: rgba(247, 244, 232, 0.92);
+  --glass: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--void);
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(196, 178, 255, 0.26) 0, rgba(122, 77, 255, 0.18) 18rem, transparent 28rem),
+    radial-gradient(ellipse at 52% 48%, rgba(198, 255, 33, 0.16) 0, rgba(198, 255, 33, 0.05) 15rem, transparent 28rem),
+    radial-gradient(ellipse at center, transparent 0 42%, rgba(38, 18, 58, 0.58) 78%, rgba(5, 4, 8, 0.98) 100%),
+    linear-gradient(180deg, #0d0a16 0%, #050408 52%, #020203 100%),
+    var(--void);
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+  overflow-x: hidden;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(360px, 1fr) auto;
+  min-height: 100vh;
+  padding: 28px 18px 18px;
+  isolation: isolate;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.26;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.52) 0 0.04rem, transparent 0.05rem),
+    radial-gradient(circle at 72% 14%, rgba(255, 255, 255, 0.42) 0 0.04rem, transparent 0.05rem),
+    radial-gradient(circle at 48% 68%, rgba(255, 255, 255, 0.34) 0 0.035rem, transparent 0.045rem),
+    repeating-radial-gradient(circle at 50% 50%, rgba(244, 240, 233, 0.16) 0 0.04rem, transparent 0.05rem 0.18rem);
+  mix-blend-mode: screen;
+}
+
+.hero {
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.kicker,
+.sensor-id,
+.vision-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-size: 4.2rem;
+  font-weight: 700;
+  line-height: 0.82;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 2rem rgba(197, 182, 255, 0.18),
+    0 0 4rem rgba(122, 77, 255, 0.2);
+}
+
+.tagline {
+  margin: 16px 0 0;
+  color: var(--soft-ink);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.scene {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 380px;
+}
+
+.scene.is-revealing .signal-bar {
+  border-color: var(--acid);
+}
+
+.signal-bar {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  width: min(250px, 66vw);
+  height: 0.28rem;
+  overflow: hidden;
+  border: 1px solid var(--dim-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(-50%);
+}
+
+.signal-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet), var(--lilac), var(--acid));
+  box-shadow: 0 0 1.3rem rgba(198, 255, 33, 0.6);
+  transition: width 110ms linear;
+}
+
+.ufo-wrap {
+  position: relative;
+  width: min(340px, 84vw);
+  height: min(340px, 84vw);
+  display: grid;
+  place-items: center;
+  touch-action: none;
+}
+
+.ufo {
+  position: absolute;
+  top: 38px;
+  left: 50%;
+  width: min(300px, 78vw);
+  height: 210px;
+  transform: translateX(-50%);
+  animation: alien-shake 1700ms ease-in-out infinite;
+  transform-origin: 50% 36%;
+  filter: drop-shadow(0 0 2.5rem rgba(122, 77, 255, 0.32));
+}
+
+.ufo::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 42px;
+  left: 50%;
+  width: 170px;
+  height: 170px;
+  border: 1px solid rgba(198, 255, 33, 0.34);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.68);
+  pointer-events: none;
+}
+
+.ufo.is-paused {
+  animation-play-state: paused;
+}
+
+.ufo.is-target .ufo-core {
+  filter: brightness(1.35);
+}
+
+.ufo.is-target::after {
+  opacity: 0.65;
+  transform: translateX(-50%) scale(1);
+}
+
+.ufo.is-opened::after {
+  animation: ufo-pulse 920ms ease-out both;
+}
+
+.ufo-dome {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 50%;
+  width: 116px;
+  height: 58px;
+  border: 1px solid rgba(244, 240, 233, 0.5);
+  border-bottom: 0;
+  border-radius: 116px 116px 0 0;
+  background:
+    radial-gradient(circle at 34% 20%, rgba(255, 255, 255, 0.86), transparent 0.42rem),
+    radial-gradient(ellipse at 44% 32%, rgba(197, 182, 255, 0.34), transparent 2.4rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(13, 11, 22, 0.92) 48%, rgba(0, 0, 0, 0.96));
+  box-shadow:
+    inset 0 0.4rem 1.4rem rgba(255, 255, 255, 0.12),
+    0 0 1.5rem rgba(197, 182, 255, 0.2);
+  transform: translateX(-50%);
+}
+
+.ufo-dome::before {
+  content: "";
+  position: absolute;
+  top: 1.05rem;
+  left: 1.45rem;
+  width: 2rem;
+  height: 0.22rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.66);
+  filter: blur(0.04rem);
+}
+
+.ufo-ring {
+  position: absolute;
+  z-index: 4;
+  top: 48px;
+  left: 50%;
+  width: 260px;
+  height: 54px;
+  border: 1px solid rgba(244, 240, 233, 0.44);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 36% 28%, rgba(255, 255, 255, 0.92), transparent 4.2rem),
+    linear-gradient(180deg, rgba(244, 240, 233, 0.9), rgba(72, 68, 82, 0.92) 42%, rgba(0, 0, 0, 0.98) 74%);
+  box-shadow:
+    inset 0 -0.55rem 1rem rgba(0, 0, 0, 0.74),
+    inset 0 0.35rem 1.2rem rgba(255, 255, 255, 0.2),
+    0 0.6rem 2.4rem rgba(0, 0, 0, 0.82);
+  transform: translateX(-50%) skewX(-7deg);
+}
+
+.ufo-core {
+  position: absolute;
+  z-index: 5;
+  top: 63px;
+  left: 50%;
+  width: 180px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(255, 255, 255, 0.92), transparent 1.4rem),
+    radial-gradient(ellipse at 50% 58%, var(--acid), rgba(198, 255, 33, 0.38) 3.8rem, transparent 6rem);
+  box-shadow:
+    0 0 1.3rem rgba(198, 255, 33, 0.72),
+    0 0 3.8rem rgba(198, 255, 33, 0.28);
+  transform: translateX(-50%) skewX(-7deg);
+}
+
+.ufo-lights {
+  position: absolute;
+  z-index: 6;
+  top: 66px;
+  left: 50%;
+  display: flex;
+  width: 118px;
+  justify-content: space-between;
+  transform: translateX(-50%) skewX(-7deg);
+}
+
+.ufo-lights span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0.8rem rgba(244, 240, 233, 0.8);
+}
+
+.ufo-beam {
+  position: absolute;
+  z-index: 1;
+  top: 86px;
+  left: 50%;
+  width: 122px;
+  height: 210px;
+  border-right: 1px solid rgba(198, 255, 33, 0.32);
+  border-left: 1px solid rgba(198, 255, 33, 0.32);
+  background:
+    radial-gradient(ellipse at 50% 6%, rgba(255, 255, 255, 0.46), transparent 3.2rem),
+    linear-gradient(180deg, rgba(198, 255, 33, 0.62), rgba(198, 255, 33, 0.2) 48%, transparent 100%);
+  clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  transform: translateX(-50%);
+  filter: blur(0.05rem);
+  opacity: 0.82;
+}
+
+.scene.is-revealing .ufo-beam {
+  animation: beam-flare 900ms ease-out both;
+}
+
+.note {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  top: 65%;
+  width: 96px;
+  height: 130px;
+  padding: 12px;
+  border: 1px solid rgba(244, 240, 233, 0.64);
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.07) 46%, rgba(255, 255, 255, 0.16)),
+    rgba(247, 244, 232, 0.12);
+  backdrop-filter: blur(1.1rem);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 1rem 2.8rem rgba(0, 0, 0, 0.46);
+  cursor: grab;
+  transform: translate(-50%, -50%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(var(--drag-rotate, -2deg));
+  transform-origin: 50% 50%;
+  transition:
+    width 260ms ease,
+    height 260ms ease,
+    background 220ms ease,
+    transform 170ms ease;
+  user-select: none;
+  touch-action: none;
+}
+
+.note::before,
+.note::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: rgba(244, 240, 233, 0.56);
+}
+
+.note::before {
+  top: 42px;
+}
+
+.note::after {
+  bottom: 26px;
+}
+
+.note:active,
+.note.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.note.is-revealed {
+  width: min(310px, 84vw);
+  height: 178px;
+  background:
+    radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.92), transparent 3.2rem),
+    linear-gradient(135deg, rgba(198, 255, 33, 0.9), rgba(197, 182, 255, 0.76));
+  color: #08070c;
+  cursor: default;
+  transform: translate(-50%, -50%) translate3d(0, 24px, 0) rotate(0deg);
+  animation: note-open-glow 900ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.note.is-revealed::before,
+.note.is-revealed::after {
+  background: rgba(8, 7, 12, 0.42);
+}
+
+.note-code {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 0.62rem;
+  line-height: 1;
+  letter-spacing: 0;
+  transition: opacity 220ms ease;
+}
+
+.note-prompt {
+  position: absolute;
+  right: 1.95rem;
+  bottom: 0.85rem;
+  left: 0.8rem;
+  color: rgba(244, 240, 233, 0.66);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.05;
+  text-align: left;
+  transition: opacity 220ms ease;
+}
+
+.note-result-label,
+.note-result {
+  position: absolute;
+  right: 1rem;
+  left: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.45rem);
+  transition:
+    opacity 260ms ease,
+    transform 360ms ease,
+    visibility 260ms ease;
+}
+
+.note-result-label {
+  top: 1rem;
+  color: rgba(8, 7, 12, 0.54);
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.note-result {
+  top: 3.05rem;
+  color: #08070c;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 0.96;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.note-text {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 1rem;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  transition: opacity 220ms ease;
+}
+
+.note.is-revealed .note-code,
+.note.is-revealed .note-prompt,
+.note.is-revealed .note-text {
+  opacity: 0;
+}
+
+.note.is-revealed .note-result-label,
+.note.is-revealed .note-result {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.vision-panel {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 12px;
+  align-items: end;
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.sensor {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--dim-line);
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.04);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 1rem 3rem rgba(0, 0, 0, 0.36);
+}
+
+.sensor video,
+.sensor canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sensor video {
+  object-fit: cover;
+  opacity: 0.38;
+  transform: scaleX(-1);
+}
+
+.sensor canvas {
+  z-index: 2;
+}
+
+.sensor-id {
+  position: absolute;
+  z-index: 3;
+  right: 7px;
+  bottom: 7px;
+  color: var(--soft-ink);
+  font-size: 0.52rem;
+}
+
+.controls {
+  display: grid;
+  gap: 10px;
+}
+
+.vision-button,
+.reset-button {
+  min-height: 48px;
+  border: 1px solid var(--dim-line);
+  border-radius: 999px;
+  color: var(--ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0.8rem 2.2rem rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+}
+
+.vision-button:disabled {
+  color: var(--muted);
+  border-color: var(--muted);
+  cursor: wait;
+}
+
+.vision-button.is-active {
+  color: var(--void);
+  border-color: var(--acid);
+  background: linear-gradient(135deg, var(--acid), rgba(197, 182, 255, 0.92));
+}
+
+.reset-button {
+  color: var(--ink);
+  border-color: rgba(244, 240, 233, 0.28);
+}
+
+.reset-button.is-visible {
+  animation: control-rise 320ms ease both;
+}
+
+.hand-cursor {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  width: 5.8rem;
+  height: 8.2rem;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(160deg, rgba(244, 240, 233, 0.98), rgba(198, 255, 33, 0.88) 72%);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 122 170'%3E%3Cpath fill='black' fill-rule='evenodd' d='M32 5C40 8 47 14 54 20L74 37C83 45 91 50 98 56C104 61 105 67 100 72C96 76 90 75 84 70L65 55C58 50 51 50 43 48L30 44C22 42 14 37 9 31C3 24-1 15 0 7C8 7 21 1 32 5ZM86 168C78 166 75 160 76 148L79 112C80 100 78 91 70 82L54 68C48 63 43 64 39 69L33 78C29 84 23 83 20 78C18 74 20 69 25 64L38 49C44 42 54 42 61 48L80 65C86 70 91 72 98 73C107 75 116 83 120 93C123 102 119 112 111 118L104 124L101 152C99 163 94 168 86 168ZM3 93C8 88 17 85 29 84L57 82C65 81 70 85 71 91C72 98 67 103 59 104L35 106C31 107 30 110 32 114L38 126C42 135 38 143 30 143C24 143 20 138 18 130L15 117C13 111 11 109 6 109C1 109-3 105-2 100C-1 98 0 95 3 93ZM43 77C49 73 58 73 64 78C58 84 48 87 39 85C39 82 40 79 43 77ZM42 95C51 91 65 90 77 96C68 103 52 106 40 102C38 99 39 97 42 95Z'/%3E%3C/svg%3E");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 122 170'%3E%3Cpath fill='black' fill-rule='evenodd' d='M32 5C40 8 47 14 54 20L74 37C83 45 91 50 98 56C104 61 105 67 100 72C96 76 90 75 84 70L65 55C58 50 51 50 43 48L30 44C22 42 14 37 9 31C3 24-1 15 0 7C8 7 21 1 32 5ZM86 168C78 166 75 160 76 148L79 112C80 100 78 91 70 82L54 68C48 63 43 64 39 69L33 78C29 84 23 83 20 78C18 74 20 69 25 64L38 49C44 42 54 42 61 48L80 65C86 70 91 72 98 73C107 75 116 83 120 93C123 102 119 112 111 118L104 124L101 152C99 163 94 168 86 168ZM3 93C8 88 17 85 29 84L57 82C65 81 70 85 71 91C72 98 67 103 59 104L35 106C31 107 30 110 32 114L38 126C42 135 38 143 30 143C24 143 20 138 18 130L15 117C13 111 11 109 6 109C1 109-3 105-2 100C-1 98 0 95 3 93ZM43 77C49 73 58 73 64 78C58 84 48 87 39 85C39 82 40 79 43 77ZM42 95C51 91 65 90 77 96C68 103 52 106 40 102C38 99 39 97 42 95Z'/%3E%3C/svg%3E");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-50px, -50px, 0);
+  filter:
+    drop-shadow(0 0 0.8rem rgba(198, 255, 33, 0.46))
+    drop-shadow(0 0 1.7rem rgba(122, 77, 255, 0.28));
+  transition: opacity 120ms ease, filter 140ms ease;
+}
+
+.hand-cursor::before,
+.hand-cursor::after {
+  display: none;
+}
+
+.hand-cursor.is-visible {
+  opacity: 1;
+}
+
+.hand-cursor.is-pinching {
+  filter:
+    drop-shadow(0 0 1rem rgba(198, 255, 33, 0.78))
+    drop-shadow(0 0 2.4rem rgba(198, 255, 33, 0.36));
+}
+
+.vision-button:focus-visible,
+.reset-button:focus-visible,
+.note:focus-visible {
+  outline: 3px solid var(--acid);
+  outline-offset: 4px;
+}
+
+@keyframes alien-shake {
+  0%, 100% {
+    transform: translateX(-50%) translate3d(0, 0, 0) rotate(0deg);
+  }
+  16% {
+    transform: translateX(-50%) translate3d(-7px, -2px, 0) rotate(-1.5deg);
+  }
+  34% {
+    transform: translateX(-50%) translate3d(7px, 1px, 0) rotate(1.5deg);
+  }
+  54% {
+    transform: translateX(-50%) translate3d(-3px, 3px, 0) rotate(0.5deg);
+  }
+  72% {
+    transform: translateX(-50%) translate3d(5px, -1px, 0) rotate(-0.5deg);
+  }
+}
+
+@keyframes note-open-glow {
+  0% {
+    filter: brightness(1);
+    box-shadow: 0 0 0 rgba(201, 255, 0, 0);
+    transform: translate(-50%, -50%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(var(--drag-rotate, -2deg)) scale(1);
+  }
+  34% {
+    filter: brightness(2.2);
+    box-shadow:
+      0 0 0 2px var(--acid),
+      0 0 42px rgba(201, 255, 0, 0.95),
+      0 0 86px rgba(56, 18, 82, 0.72);
+    transform: translate(-50%, -50%) translate3d(0, -18px, 0) rotate(0deg) scale(1.08);
+  }
+  100% {
+    filter: brightness(1);
+    box-shadow:
+      0 0 0 1px rgba(201, 255, 0, 0.9),
+      0 0 24px rgba(201, 255, 0, 0.42);
+    transform: translate(-50%, -50%) translate3d(0, 24px, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes beam-flare {
+  0% {
+    opacity: 0.78;
+    filter: brightness(1);
+  }
+  38% {
+    opacity: 1;
+    filter: brightness(2.4);
+  }
+  100% {
+    opacity: 0.62;
+    filter: brightness(1.05);
+  }
+}
+
+@keyframes ufo-pulse {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.55);
+  }
+  42% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1.25);
+  }
+  100% {
+    opacity: 0.12;
+    transform: translateX(-50%) scale(1.72);
+  }
+}
+
+@keyframes control-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.45rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 820px) {
+  .app {
+    grid-template-columns: minmax(310px, 0.8fr) minmax(420px, 1.2fr);
+    grid-template-rows: 1fr auto;
+    gap: 28px;
+    align-items: center;
+    padding: 42px;
+  }
+
+  h1 {
+    font-size: 6.7rem;
+  }
+
+  .hero {
+    margin: 0;
+  }
+
+  .scene {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-height: 650px;
+  }
+
+  .ufo-wrap {
+    width: 480px;
+    height: 480px;
+  }
+
+  .ufo {
+    top: 62px;
+    width: 390px;
+    height: 280px;
+  }
+
+  .ufo-dome {
+    width: 150px;
+    height: 76px;
+    border-radius: 150px 150px 0 0;
+  }
+
+  .ufo-ring {
+    top: 64px;
+    width: 350px;
+    height: 72px;
+  }
+
+  .ufo-core {
+    top: 84px;
+    width: 238px;
+    height: 52px;
+  }
+
+  .ufo-lights {
+    top: 90px;
+    width: 162px;
+  }
+
+  .ufo-beam {
+    top: 118px;
+    width: 164px;
+    height: 270px;
+  }
+
+  .note {
+    top: 67%;
+    width: 112px;
+    height: 152px;
+  }
+
+  .vision-panel {
+    margin: 0;
+    width: min(100%, 430px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

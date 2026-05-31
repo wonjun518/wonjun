@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alien Draw</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <div class="noise" aria-hidden="true"></div>
+    <div class="hand-cursor" id="handCursor" aria-hidden="true"></div>
+
+    <header class="hero">
+      <p class="kicker">NOCTURNAL SIGNAL</p>
+      <h1>ALIEN<br>DRAW</h1>
+      <p class="tagline">낯선 둘을 위한 몽환적인 오늘의 좌표</p>
+    </header>
+
+    <section class="scene" aria-label="랜덤 추첨 장치">
+      <div class="signal-bar" aria-hidden="true">
+        <span id="meterFill"></span>
+      </div>
+
+      <div class="ufo-wrap">
+        <div class="ufo" id="randomBox" aria-hidden="true">
+          <div class="ufo-dome"></div>
+          <div class="ufo-ring"></div>
+          <div class="ufo-core"></div>
+          <div class="ufo-lights">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="ufo-beam"></div>
+        </div>
+
+        <button class="note" id="note" type="button" aria-label="쪽지를 끌어당겨 랜덤 결과 보기">
+          <span class="note-code">SPECIMEN</span>
+          <span class="note-prompt">PINCH & PLACE</span>
+          <span class="note-result-label">TODAY'S COORDINATE</span>
+          <span class="note-result" id="resultText">결과 준비 중</span>
+          <span class="note-text">MOVE TO UFO</span>
+        </button>
+      </div>
+    </section>
+
+    <aside class="vision-panel" aria-label="손동작 인식">
+      <div class="sensor">
+        <video id="webcam" autoplay muted playsinline></video>
+        <canvas id="handCanvas"></canvas>
+        <div class="sensor-id">VISION FEED</div>
+      </div>
+      <div class="controls">
+        <button class="vision-button" id="visionButton" type="button">VISION ON</button>
+        <button class="reset-button" id="resetButton" type="button" hidden>RESET DRAW</button>
+        <p class="vision-status" id="visionStatus">CAMERA OFF</p>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
